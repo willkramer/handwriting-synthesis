@@ -6,7 +6,11 @@ from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
-from tensorflow.python.ops.rnn_cell_impl import _concat, _like_rnncell
+# from tensorflow.python.ops.rnn_cell_impl import _concat, _like_rnncell
+from tensorflow.python.ops import rnn_cell_impl
+_concat = rnn_cell_impl._concat
+# Replace _like_rnncell check with isinstance check against RNNCell
+from tensorflow.python.ops.rnn_cell_impl import RNNCell
 from tensorflow.python.ops.rnn import _maybe_tensor_shape_from_tensor
 from tensorflow.python.util import nest
 from tensorflow.python.framework import tensor_shape
@@ -26,7 +30,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
         final cell state,
     )
     """
-    if not _like_rnncell(cell):
+    if not isinstance(cell, RNNCell):
         raise TypeError("cell must be an instance of RNNCell")
     if not callable(loop_fn):
         raise TypeError("loop_fn must be a callable")
