@@ -1,4 +1,9 @@
 import os
+# Disable GPU
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+# Disable TensorFlow logging
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import logging
 
 import numpy as np
@@ -12,7 +17,6 @@ from rnn import rnn
 class Hand(object):
 
     def __init__(self):
-        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
         self.nn = rnn(
             log_dir='logs',
             checkpoint_dir='checkpoints',

@@ -41,7 +41,8 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
     # determined by the parent scope, or is set to place the cached
     # Variable using the same placement as for the rest of the RNN.
     with vs.variable_scope(scope or "rnn") as varscope:
-        if context.in_graph_mode():
+        # if context.in_graph_mode():
+        if not context.executing_eagerly():  # Check if NOT in eager mode (i.e., in graph mode)
             if varscope.caching_device is None:
                 varscope.set_caching_device(lambda op: op.device)
 
